@@ -66,6 +66,7 @@ class CustomerSupportAgent:
             f"User email: {user_email}\n"
             f"User message: {message}\n\n"
             "If the user asks about where is an order, try to find the location of the shipment."
+            "If the user asks about return policy, faqs, warranty or product guides, check the documents with semantic search"
             "Security rule: Only reveal order or personal information if it belongs to this email. If you cannot verify ownership, refuse to answer.\n"
             "Answer concisely and ground your response only on tool outputs."
             "Format your final answer in nice markdown"
