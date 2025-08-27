@@ -1,0 +1,4 @@
+smolagents 
+smolagents[openai]
+intersystems-irispython
+gradio

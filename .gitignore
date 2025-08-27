@@ -1,0 +1,72 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.dll
+*.dylib
+*.egg-info/
+.eggs/
+.Python
+pip-wheel-metadata/
+dist/
+build/
+site/
+wheelhouse/
+
+# Virtual envs
+.venv/
+venv/
+ENV/
+
+# Caches & tooling
+.cache/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+.dmypy.json
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+
+# --- Docker / env ---
+.env
+.env.local
+docker-compose.override.yml
+.docker/
+docker-data/
+
+# --- IRIS runtime artifacts (keep source + CSVs/DDL) ---
+# If you mount a host dir for persistent IRIS data, ignore it here:
+iris/runtime/
+iris/**/mgr/
+iris/**/journal/
+iris/**/temp/
+iris/**/cache/
+iris/**/iris.lck
+
+# --- Project-specific scratch ---
+python/tmp/
+python/checkpoints/
+python/models/
+
+# --- (Optional) Node if you add a tiny UI later ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*

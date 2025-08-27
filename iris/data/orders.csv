@@ -1,0 +1,7 @@
+OrderID,CustomerID,ProductID,OrderDate,Status
+1001,1,101,2025-08-10,Shipped
+1002,1,102,2025-08-12,Delivered
+1003,2,103,2025-08-14,Processing
+1004,2,104,2025-08-15,Shipped
+1005,3,105,2025-08-16,Delivered
+1006,3,101,2025-08-18,Processing

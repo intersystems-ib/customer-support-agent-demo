@@ -1,0 +1,25 @@
+    // unexpire passwords to avoid login issues
+    new $namespace
+    set $namespace = "%SYS"
+    do ##class(Security.Users).UnExpireUserPasswords("*")
+
+    set $namespace = "USER"
+
+    // load SQL schema and and data
+    do ##class(%SQL.Statement).%ExecDirect(, "LOAD SQL FROM FILE '/opt/irisapp/sql/schema.sql' DIALECT 'IRIS' DELIMITER ';'")
+    do ##class(%SQL.Statement).%ExecDirect(, "LOAD SQL FROM FILE '/opt/irisapp/sql/load_data.sql' DIALECT 'IRIS' DELIMITER ';'")
+
+    // load source code
+    do $SYSTEM.OBJ.LoadDir("/opt/irisapp/src", "ck", ,1)
+
+    // start production
+    set production = "Agent.Interop"
+    set ^Ens.Configuration("csp","LastProduction") = production
+    do ##class(Ens.Director).SetAutoStart(production)
+
+    // import web applications
+    set $namespace = "%SYS"
+    do ##class(Security.Applications).Import("/opt/irisapp/install/webapp.xml")
+    do ##class(Security.SSLConfigs).Import("/opt/irisapp/install/llm_ssl.xml")
+
+    halt
