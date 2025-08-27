@@ -230,7 +230,8 @@ curl --header "Content-Type: application/json" \
 This information can also be consumed by the agent.
 
 ✨ And since IRIS has a built-in **Visual Trace** viewer, you can actually see each message flowing through the system.
-*(We’ll add an animated GIF here to show the Trace Viewer in action!)*
+
+<img src="img/message-trace.gif" width="900" />
 
 ---
 
@@ -266,9 +267,10 @@ python -m cli.run --email alice@example.com --message "Where is my order #1001?"
 python -m cli.run --email alice@example.com --message "What is the warranty period of my latest order?"
 
 python -m cli.run --email alice@example.com --message "What is the status of the shipping of my latest order ? Where is it?"
+
 ```
 
-*(We’ll add a one-shot demo GIF here)*
+<img src="img/run-agent-one-shot.gif" width="900" />
 
 ---
 
@@ -280,8 +282,6 @@ Start a small session where you can type multiple questions in a row.
 python -m cli.run --email alice@example.com
 ```
 
-*(We’ll add an interactive CLI GIF here)*
-
 ---
 
 ### 🔹 Web UI (Gradio)
@@ -292,7 +292,9 @@ A lightweight chat UI with Gradio, so you can talk to the agent in your browser.
 python -m ui.gradio
 ```
 
-*(We’ll add a Gradio UI GIF here)*
+Then open the UI in http://localhost:7860
+
+<img src="img/run-agent-ui.gif" width="900" />
 
 ---
 
