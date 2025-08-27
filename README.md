@@ -177,7 +177,7 @@ The agent is a smolagents CodeAgent:
 
 # Running the agent
 
-## One-shot
+## One-shot
 Try some one-shot commands like this to test your agent.
 
 ```bash
