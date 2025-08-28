@@ -264,9 +264,13 @@ Run a single question + get a single answer. Perfect for quick tests.
 ```bash
 python -m cli.run --email alice@example.com --message "Where is my order #1001?"
 
-python -m cli.run --email alice@example.com --message "What is the warranty period of my latest order?"
+python -m cli.run --email alice@example.com --message "Show electronics that are good for travel"
 
-python -m cli.run --email alice@example.com --message "What is the status of the shipping of my latest order ? Where is it?"
+python -m cli.run --email alice@example.com --message "Was my headphones order delivered, and what’s the return window?"
+
+python -m cli.run --email alice@example.com --message "Find headphones under $120 with ANC"
+
+python -m cli.run --email alice@example.com --message "If my order is out of warranty, what options do i have?"
 
 ```
 
