@@ -37,7 +37,6 @@ class ShippingStatusTool(Tool):
         "order_status": {"type": "string", "description": "Order status to report (e.g., 'Processing')."},
         "tracking_number": {"type": "string", "description": "Tracking number (e.g., 'DHL7788')."},
         "request_id": {"type": "string", "description": "Optional request id for tracing. If omitted, a UUID is generated.", "nullable": True},
-        "url": {"type": "string", "description": "Optional override for the IRIS endpoint URL.", "nullable": True},
         "timeout_sec": {"type": "number", "description": "Optional HTTP timeout (seconds). Default 10.", "nullable": True},
     }
     output_type = "string"
@@ -54,10 +53,9 @@ class ShippingStatusTool(Tool):
         order_status: str,
         tracking_number: str,
         request_id: Optional[str] = None,
-        url: Optional[str] = None,
         timeout_sec: float = 10.0,
     ) -> str:
-        endpoint = (url or self.default_url).rstrip("/")
+        endpoint = self.default_url.rstrip("/")
         rid = request_id or str(uuid.uuid4())
 
         payload: Dict[str, Any] = {
