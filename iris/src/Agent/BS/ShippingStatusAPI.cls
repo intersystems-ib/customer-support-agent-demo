@@ -20,6 +20,7 @@ ClassMethod ShippingStatus() As %Status
         // instantiate msg from request body payload
         set msg = ##class(Agent.Msg.ShippingStatusReq).%JSONNew()
         $$$ThrowOnError(msg.%JSONImport(body))
+        set msg.xRequestId = %request.GetCgiEnv("HTTP_X_REQUEST_ID")
 
         // instatiate interop business service and send to ingestion process
         $$$ThrowOnError(##class(Ens.Director).CreateBusinessService("Shipping Status API", .service))
