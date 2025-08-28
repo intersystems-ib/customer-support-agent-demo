@@ -1,3 +1,7 @@
+/// 
+/// Shipping Status API Business Service
+/// - It receives shipping status requests from external systems
+/// - In this demo, it will receive requests from Agent through the shipping_tool
 Class Agent.BS.ShippingStatusAPI Extends (%CSP.REST, Ens.BusinessService)
 {
 
