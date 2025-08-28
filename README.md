@@ -74,20 +74,26 @@ To run this demo you’ll need:
 
 ### 1. Setup Python Environment
 
+Create a virtual environment
 ```bash
-# create a local venv environment
+# Mac/Linux
 python3 -m venv .venv
-# ... for Windows users
+# Windows
 python -m venv .venv
+```
 
-# activate venv
-# ... for Mac or Linux users
+Activate the environment:
+```bash
+# Mac/Linux
 source .venv/bin/activate
-# ... for Windows users
-./venv/Scripts/Activate.ps1
 
-# install dependencies
-pip3 install -r requirements.txt
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+```
+
+Then, install dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
 Create a `.env` file:
@@ -210,6 +216,16 @@ python scripts/embed_sql.py
 ```
 
 After that have a look at the tables and check that embeddings are now included.
+
+```sql
+-- Products
+SELECT * FROM Agent_Data.Products;
+```
+
+```sql
+-- Chunks from documents
+SELECT * FROM Agent_Data.DocChunks;
+```
 
 ---
 
