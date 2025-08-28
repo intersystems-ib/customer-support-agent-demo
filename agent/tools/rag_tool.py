@@ -83,21 +83,20 @@ class RAGDocSearchTool(_BaseRAGSQLTool):
 
         sql = f"""
         SELECT TOP {top_k}
-            d.DocID                        doc_id,
-            d.Title                        title,
-            SUBSTRING(d.BodyText, 1, 400)  snippet,
-            VECTOR_DOT_PRODUCT(dv.Embedding, EMBEDDING(?, '{cfg}')) score
-        FROM Agent_Data.DocVectors dv
-        JOIN Agent_Data.Docs d ON d.DocID = dv.DocID
+            c.ChunkID            AS chunk_id,
+            c.DocID              AS doc_id,
+            c.Title              AS title,
+            SUBSTRING(c.ChunkText, 1, 400) AS snippet,
+            VECTOR_DOT_PRODUCT(c.Embedding, EMBEDDING(?, '{cfg}')) AS score
+        FROM Agent_Data.DocChunks c
         ORDER BY score DESC
         """
-
-        print(sql)
         rows = self._db.query(sql, [q])
 
         payload = {
             "snippets": [
                 {
+                    "chunk_id": r.get("chunk_id"),
                     "doc_id": r.get("doc_id"),
                     "title": r.get("title"),
                     "snippet": (r.get("snippet") or "").strip(),
@@ -116,21 +115,18 @@ class RAGProductSearchTool(_BaseRAGSQLTool):
     Semantic search over products:
 
     • Scores each ProductVectors.Embedding against EMBEDDING(:query, '<config>') in IRIS
-    • Optional filters: category (exact), price_max (<=)
+    • Optional filters: price_max (<=)
     • Returns top-k products with similarity score
     """
 
     name = "rag_product_search"
     description = (
-        "Semantic search over products using ProductVectors + Products with explicit JOINs. "
-        "Computes the query embedding inside IRIS via EMBEDDING(query, '<config>'). "
-        "Supports optional filters: category and price_max."
+        "Semantic search over products names and descriptions. Optinally you can specify maximum price"
     )
     inputs: Dict[str, Dict[str, Any]] = {
         "query": {"type": "string", "description": "Natural-language query (required)."},
         "k": {"type": "integer", "description": "How many products to return (default 5, max 20).", "nullable": True},
-        "category": {"type": "string", "description": "Optional exact category filter.", "nullable": True},
-        "price_max": {"type": "number", "description": "Optional maximum price (inclusive).", "nullable": True},
+        "price_max": {"type": "number", "description": "Optional maximum price.", "nullable": True},
     }
     output_type = "string"
 
@@ -138,7 +134,6 @@ class RAGProductSearchTool(_BaseRAGSQLTool):
         self,
         query: str,
         k: int = 5,
-        category: Optional[str] = None,
         price_max: Optional[float] = None,
     ) -> str:
         self.setup()
@@ -155,10 +150,7 @@ class RAGProductSearchTool(_BaseRAGSQLTool):
         # Build WHERE for optional filters (all bound as parameters)
         where = []
         params: List[Any] = [q]  # first param is the text for EMBEDDING(?, cfg)
-        if category:
-            where.append("p.Category = ?")
-            params.append(category)
-        if price_max is not None:
+        if price_max is not None and price_max >= 0:
             where.append("p.Price <= ?")
             params.append(price_max)
         where_sql = f"WHERE {' AND '.join(where)}" if where else ""
@@ -169,9 +161,8 @@ class RAGProductSearchTool(_BaseRAGSQLTool):
             p.Name,
             p.Category,
             p.Price,
-            VECTOR_DOT_PRODUCT(pv.Embedding, EMBEDDING(?, '{cfg}')) score
-        FROM Agent_Data.ProductVectors pv
-        JOIN Agent_Data.Products p ON p.ProductID = pv.ProductID
+            VECTOR_DOT_PRODUCT(p.Embedding, EMBEDDING(?, '{cfg}')) score
+        FROM Agent_Data.Products p
         {where_sql}
         ORDER BY score DESC
         """

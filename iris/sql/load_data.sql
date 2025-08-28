@@ -12,7 +12,7 @@ USING {"from":{"file":{"header":true}}};
 -- Products
 ------------------------------------------------------------
 LOAD DATA FROM FILE '/app/iris/data/products.csv'
-INTO Agent_Data.Products
+INTO Agent_Data.Products (ProductID, Name, Category, Price, WarrantyMonths, Description)
 USING {"from":{"file":{"header":true}}};
 
 ------------------------------------------------------------

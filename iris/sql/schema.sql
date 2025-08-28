@@ -25,7 +25,8 @@ CREATE TABLE Agent_Data.Products (
     Category VARCHAR(50),
     Price DECIMAL(10,2),
     WarrantyMonths INT,
-    Description VARCHAR(1000)
+    Description VARCHAR(1000),
+    Embedding VECTOR(FLOAT, 1536)     -- vector for product search
 );
 
 ------------------------------------------------------------
@@ -53,29 +54,18 @@ CREATE TABLE Agent_Data.Shipments (
 );
 
 ------------------------------------------------------------
--- Product Vectors for semantic search
+-- Document storage for knowledge base
 ------------------------------------------------------------
-CREATE TABLE Agent_Data.ProductVectors (
-    ProductID INT PRIMARY KEY,
-    Embedding VECTOR(FLOAT, 1536),
-    FOREIGN KEY (ProductID) REFERENCES Agent_Data.Products(ProductID)
-);
-
-------------------------------------------------------------
--- Document Vectors for RAG
-------------------------------------------------------------
-CREATE TABLE Agent_Data.DocVectors (
-    DocID VARCHAR(64) PRIMARY KEY,
-    Title VARCHAR(200),
-    Embedding VECTOR(FLOAT, 1536)
-);
-
-------------------------------------------------------------
--- Optional: Docs metadata table
-------------------------------------------------------------
-CREATE TABLE Agent_Data.Docs (
-    DocID VARCHAR(64) PRIMARY KEY,
-    Title VARCHAR(200),
-    BodyText VARCHAR(4000),
-    DocType VARCHAR(50)
+CREATE TABLE Agent_Data.DocChunks (
+    ChunkID     INT IDENTITY,
+    DocID       VARCHAR(64)     NOT NULL,   -- logical doc grouping key (filename stem, etc.)
+    ChunkIndex  INT             NOT NULL,   -- 0,1,2… within the DocID
+    StartPos    INT,                        -- optional: char offset
+    EndPos      INT,                        -- optional: char offset
+    Title       VARCHAR(200),
+    Heading     VARCHAR(200),
+    ChunkText   VARCHAR(4000)   NOT NULL,  
+    Embedding   VECTOR(FLOAT, 1536),        -- vector for semantic search
+    CONSTRAINT DocChunksPK PRIMARY KEY (ChunkID),
+    CONSTRAINT DocChunksDocIndexUQ UNIQUE (DocID, ChunkIndex)
 );

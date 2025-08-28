@@ -3,17 +3,19 @@ from __future__ import annotations
 
 from typing import Any, Iterable, List, Dict, Tuple, Optional
 
+import os 
+
 # InterSystems IRIS Python DB-API (PEP 249)
 # Docs: https://docs.intersystems.com/iris20252/csp/docbook/DocBook.UI.Page.cls?KEY=BPYNAT_pyapi
 import iris
 
 
-# --- Hardcoded connection settings (adjust for your setup) ---
-_HOST: str = "localhost"
-_PORT: int = 1972
-_NAMESPACE: str = "USER"
-_USERNAME: str = "SuperUser"
-_PASSWORD: str = "SYS"
+# --- Get connection settings from environment ---
+_HOST: str = os.getenv("IRIS_HOST", "localhost") 
+_PORT: int = int(os.getenv("IRIS_PORT", 1972))
+_NAMESPACE: str = os.getenv("IRIS_NAMESPACE", "USER")
+_USERNAME: str = os.getenv("IRIS_USERNAME", "SuperUser") 
+_PASSWORD: str = os.getenv("IRIS_PASSWORD", "SYS")
 # -------------------------------------------------------------
 
 

@@ -5,10 +5,6 @@
 
     set $namespace = "USER"
 
-    // load SQL schema and and data
-    do ##class(%SQL.Statement).%ExecDirect(, "LOAD SQL FROM FILE '/opt/irisapp/sql/schema.sql' DIALECT 'IRIS' DELIMITER ';'")
-    do ##class(%SQL.Statement).%ExecDirect(, "LOAD SQL FROM FILE '/opt/irisapp/sql/load_data.sql' DIALECT 'IRIS' DELIMITER ';'")
-
     // load source code
     do $SYSTEM.OBJ.LoadDir("/opt/irisapp/src", "ck", ,1)
 
