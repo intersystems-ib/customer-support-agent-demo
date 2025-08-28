@@ -28,6 +28,7 @@ class CustomerSupportAgent:
 
         model_id = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
         temperature = float(os.getenv("OPENAI_TEMPERATURE", "0.2"))
+        api_base = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
         max_steps = int(os.getenv("AGENT_MAX_STEPS", "8"))
         verbosity = int(os.getenv("AGENT_VERBOSITY", "1"))  # 0,1,2
 
@@ -35,7 +36,7 @@ class CustomerSupportAgent:
             model_id=model_id,
             api_key=api_key,
             temperature=temperature,
-            max_tokens=4096
+            api_base=api_base,
         )
 
         # Fixed toolset
@@ -50,6 +51,7 @@ class CustomerSupportAgent:
         # Let smolagents use its default system prompt and auto-describe tools from docstrings
         self.agent = CodeAgent(
             tools=[sql_last_order_tool, sql_order_by_id_tool, sql_orders_in_range_tool, rag_doc_search_tool, rag_product_search_tool, shipping_status_tool],
+            additional_authorized_imports=['datetime', 'os', 'json', 'requests', 're', 'math'],
             model=model,
             max_steps=max_steps,
             verbosity_level=verbosity,
