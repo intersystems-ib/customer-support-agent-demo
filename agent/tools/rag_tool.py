@@ -55,7 +55,7 @@ class RAGDocSearchTool(_BaseRAGSQLTool):
     Semantic search over knowledge base documents:
 
     • Scores each DocVectors.Embedding against EMBEDDING(:query, '<config>') inside IRIS
-    • Returns top-k snippets (DocID, Title, Body snippet, score)
+    • Returns top-k snippets (ChunkId, DocID, Title, Body snippet, score)
     """
 
     name = "rag_doc_search"

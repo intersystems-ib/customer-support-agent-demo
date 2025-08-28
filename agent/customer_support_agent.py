@@ -8,11 +8,10 @@ from smolagents import CodeAgent, OpenAIServerModel
 
 # Fixed tools (ensure each tool has a good docstring so smolagents can auto-describe it)
 from agent.tools.sql_tool import SQLLastOrdersTool, SQLOrderByIdTool, SQLOrdersInRangeTool
-from .tools.rag_tool import RAGDocSearchTool, RAGProductSearchTool
-from .tools.shipping_tool import ShippingStatusTool
+from agent.tools.rag_tool import RAGDocSearchTool, RAGProductSearchTool
+from agent.tools.shipping_tool import ShippingStatusTool
 
 from db.iris_client import IRISClient
-
 
 class CustomerSupportAgent:
     """
@@ -40,7 +39,6 @@ class CustomerSupportAgent:
         )
 
         # Fixed toolset
-
         iris_client = IRISClient()
         sql_last_order_tool = SQLLastOrdersTool(db=iris_client) 
         sql_order_by_id_tool = SQLOrderByIdTool(db=iris_client)
