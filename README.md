@@ -314,7 +314,7 @@ python -m ui.gradio
 
 Then open the UI in http://localhost:7860
 
-<img src="img/run-agent-ui.gif" width="900" />
+<img src="img/run-agent-ui-2.gif" width="900" />
 
 ---
 
