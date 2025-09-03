@@ -318,9 +318,105 @@ Then open the UI in http://localhost:7860
 
 ---
 
+## 🎁 Bonus: Running Locally with Ollama
+
+You don’t need OpenAI—run both **LLM** and **embeddings** entirely on your laptop using [Ollama](https://ollama.ai).
+
+### 1. Install Ollama
+
+Follow instructions at [ollama.ai/download](https://ollama.ai/download).
+
+### 2. Download models
+
+```bash
+# download an embedding model
+ollama pull nomic-embed-text:latest
+
+# download a coding/LLM model
+ollama pull devstral:24b-small-2505-q4_K_M
+
+# list installed models
+ollama list
+```
+
+### 3. Test local models in Ollama
+
+Test [nomic-embed-text](https://ollama.com/library/nomic-embed-text) embedding model using: 
+```bash
+curl http://localhost:11434/api/embeddings -d '{
+  "model": "nomic-embed-text:latest",
+  "prompt": "Ollama makes running local LLMs easy"
+}'
+```
+
+Test [devstral](https://ollama.com/library/devstral) interactively:
+```bash
+ollama run devstral:24b-small-2505-q4_K_M
+```
+
+Or using a REST interface:
+```bash
+curl http://localhost:11434/api/generate -d '{
+  "model": "devstral:24b-small-2505-q4_K_M",
+  "prompt": "Tell me a joke",
+  "stream": false
+}'
+```
+
+### 4. Configure IRIS to use Ollama embeddings
+
+As IRIS runs in Docker, access Ollama server in your localhost via `host.docker.internal`:
+
+```sql
+INSERT INTO %Embedding.Config (Name, Configuration, EmbeddingClass, VectorLength, Description)
+  VALUES ('ollama-nomic-config', 
+          '{"apiBase":"http://host.docker.internal:11434/api/embeddings", 
+            "modelName": "nomic-embed-text:latest"}',
+          'Embedding.Ollama', 
+          768,  
+          'embedding model in Ollama');
+```
+
+### 5. Adjust embedding vector size
+
+Adjust vector columns in the schema to the size of embeddings returned by [nomic-embed-text](https://ollama.com/library/nomic-embed-text) model:
+
+```sql
+ALTER TABLE Agent_Data.Products DROP COLUMN Embedding;
+ALTER TABLE Agent_Data.Products ADD COLUMN Embedding VECTOR(FLOAT, 768);
+
+ALTER TABLE Agent_Data.DocChunks DROP COLUMN Embedding;
+ALTER TABLE Agent_Data.DocChunks ADD COLUMN Embedding VECTOR(FLOAT, 768);
+```
+
+### 6. Update `.env`
+
+Update the `.env` file to use local Ollama models:
+
+```bash
+OPENAI_MODEL=devstral:24b-small-2505-q4_K_M
+OPENAI_API_BASE=http://localhost:11434/v1
+EMBEDDING_CONFIG_NAME=ollama-nomic-config
+```
+
+### 7. Update embeddings 
+
+Run script that loops over documents and records that needs to be embedded to update the embeddings using the local model:
+
+```bash
+python scripts/embed_sql.py
+```
+
+Now, the agent will run **fully local**: IRIS + Ollama 🚀
+
+```bash
+python -m cli.run --email alice@example.com --message "If my order is out of warranty, what options do i have?"
+```
+
+---
+
 ## 🎉 Wrap up
 
 * You’ve just set up an **AI-powered customer support agent** that combines **LLM reasoning**, **structured SQL data**, **unstructured docs with RAG**, and **live interoperability APIs**.
 * This is a **technical repo**, but hey, customer support is never boring when you have an AI sidekick 🤖.
 * Next steps? Extend the schema, add more tools, or plug it into your own data sources!
-
