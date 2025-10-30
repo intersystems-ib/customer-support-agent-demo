@@ -59,6 +59,7 @@ iris/**/journal/
 iris/**/temp/
 iris/**/cache/
 iris/**/iris.lck
+irisdata/*
 
 # --- Project-specific scratch ---
 python/tmp/
