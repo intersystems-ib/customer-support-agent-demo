@@ -1,16 +1,16 @@
 services:
 
   # InterSystems IRIS 
-  iris:
+  iris-customer-support:
     build:
       context: iris
       dockerfile: Dockerfile
-    container_name: iris
+    container_name: iris-customer-support
     ports:
       - 1972:1972
       - 52773:52773
     volumes:
       - ./:/app
-    #  - ./irisdata:/irisdata
-    #environment:
-    #- ISC_DATA_DIRECTORY=/irisdata
+      - ./irisdata:/irisdata
+    environment:
+    - ISC_DATA_DIRECTORY=/irisdata
